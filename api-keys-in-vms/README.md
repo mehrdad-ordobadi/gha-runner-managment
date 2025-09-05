@@ -90,13 +90,13 @@ ExecStart=/usr/bin/docker run --rm \
 ### Heres the file structure of the this example:
 
 /opt/myapp/
-├── run.sh          (owner: myapp:myapp, permissions: 755)
-├── main.py         (owner: myapp:myapp, permissions: 644)
-└── config/
-    └── app.conf    (owner: myapp:myapp, permissions: 644)
+        ├── run.sh          (owner: myapp:myapp, permissions: 755)
+        ├── main.py         (owner: myapp:myapp, permissions: 644)
+        └── config/
+            └── app.conf    (owner: myapp:myapp, permissions: 644)
 
 /etc/systemd/creds/
-└── api_key.cred    (owner: myapp:myapp, permissions: 600)sy
+                └── api_key.cred    (owner: myapp:myapp, permissions: 600)sy
 
 ### Enable the sevice:
 
