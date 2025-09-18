@@ -131,3 +131,5 @@ curl -H "Authorization: Bearer $API_KEY" https://api.example.com/data
 export API_KEY
 python3 /opt/runner-start/main.py
 ```
+
+## Next add checks for the runner: check if runner exists before provisioning. Cronjob to check status - if status is not good remove and reprovision.

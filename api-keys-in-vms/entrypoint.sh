@@ -5,6 +5,6 @@ if [ -z "$TOKEN" ] || [ -z "$GITHUB_URL" ]; then
     exit 1
 fi
 
-./config.sh --url "$GITHUB_URL" --token "$TOKEN" --name "$RUNNER_NAME" --replace --unattended
+./config.sh --url "$GITHUB_URL" --token "$TOKEN" --name "$RUNNER_NAME" --labels "$RUNNER_LABELS" --replace --unattended
 
 ./run.sh

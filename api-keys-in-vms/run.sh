@@ -1,6 +1,10 @@
+cat /opt/runner-start/run.sh
 #!/bin/bash
 
 API_KEY=$(cat "$CREDENTIALS_DIRECTORY/api_key" | tr -d '[:space:]')
+
+REPO="ACIT3495-project2"
+GH_USER="mehrdad-ordobadi"
 
 if [ -n "$API_KEY" ]; then
         RESPONSE=$(curl -L -X POST \
@@ -18,7 +22,8 @@ if [ -z "$REG_TOKEN" ]; then
 	echo "****No token!****"
 fi
 
-docker run -d -e GITHUB_URL="https://github.com/mehrdad-ordobadi/ACIT3495-project2" \
+docker run -d --rm -e GITHUB_URL="https://github.com/mehrdad-ordobadi/ACIT3495-project2" \
         -e RUNNER_NAME="mac2-runner" \
+	-e RUNNER_LABELS="mac2-runner,self-hosted,linux,x64" \
         -e TOKEN=${REG_TOKEN} \
-	mehrdadfordobadi/gh-runner:2
+	mehrdadfordobadi/gh-runner:3

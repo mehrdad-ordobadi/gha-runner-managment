@@ -7,6 +7,7 @@ ENV GITHUB_RUNNER_VERSION=${RUNNER_VERSION}
 ENV GITHUB_URL=""
 ENV RUNNER_NAME=""
 ENV TOKEN=""
+ENV RUNNER_LABELS=""
 
 # Install required packages without sudo, unnecessary tools like nodejs, npm, or docker
 RUN apt update && apt install -y \
