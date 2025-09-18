@@ -8,17 +8,16 @@ Methodology:
 ### Create the encrypted credentials:
 
 ```
-# Create myapp user
-sudo useradd -r -s /bin/false myapp
+# Create runner-start user
+sudo useradd -r -s /bin/false runner-start
 
 # Create cred directory
 sudo mkdir -p /etc/systemd/creds
 
-# Create the credential (you'll be prompted for the actual API key)
-echo "your_actual_api_key_here" | sudo systemd-creds encrypt --name=api_key - /etc/systemd/creds/api_key.cred
+echo "<your_api_key>" | sudo systemd-creds encrypt - /etc/systemd/creds/api_key
 
 # Set appropriate permissions
-sudo chown myapp:myapp /etc/systemd/creds/api_key.cred
+sudo chown runner-start:runner-start /etc/systemd/creds/api_key.cred
 sudo chmod 600 /etc/systemd/creds/api_key.cred
 ```
 
@@ -26,22 +25,22 @@ sudo chmod 600 /etc/systemd/creds/api_key.cred
 
 ```
 # Create application directory
-sudo mkdir -p /opt/myapp
+sudo mkdir -p /opt/runner-start
 
-# Change ownership to myapp user
-sudo chown -R myapp:myapp /opt/myapp
+# Change ownership to runner-start user
+sudo chown -R runner-start:runner-start /opt/runner-start
 
 # Set appropriate permissions
-sudo chmod 755 /opt/myapp  # Directory readable/executable
+sudo chmod 755 /opt/runner-start  # Directory readable/executable
 
 # Copy your script to the directory
-sudo cp your_script.sh /opt/myapp/run.sh
+sudo cp your_script.sh /opt/runner-start/run.sh
 
-# Make myapp the owner
-sudo chown myapp:myapp /opt/myapp/run.sh
+# Make runner-start the owner
+sudo chown runner-start:runner-start /opt/runner-start/run.sh
 
 # Make script executable
-sudo chmod 755 /opt/myapp/run.sh
+sudo chmod 755 /opt/runner-start/run.sh
 ```
 
 ### Create systemd service:
@@ -49,23 +48,25 @@ sudo chmod 755 /opt/myapp/run.sh
 create the service config file:
 
 ```
-sudo vim /etc/systemd/system/myapp.service
+sudo vim /etc/systemd/system/runner-start.service
 ```
 
 with content:
 
 ```
+cat /etc/systemd/system/runner-start.service
 [Unit]
 Description=My Application
 After=network.target
 
 [Service]
 Type=simple
-User=myapp # change this
-Group=myapp # change this
-WorkingDirectory=/opt/myapp
-ExecStart=/opt/myapp/run.sh # location of the script that will use the credentials
-LoadCredential=api_key:/etc/systemd/creds/api_key.cred 
+User=runner-start
+Group=runner-start
+WorkingDirectory=/opt/runner-start
+Environment=HOME=/opt/runner-start
+ExecStart=/opt/runner-start/run.sh
+LoadCredentialEncrypted=api_key:/etc/systemd/creds/api_key
 Restart=on-failure
 
 [Install]
@@ -89,14 +90,14 @@ ExecStart=/usr/bin/docker run --rm \
 
 ### Heres the file structure of the this example:
 
-            /opt/myapp/
-                    ├── run.sh          (owner: myapp:myapp, permissions: 755)
-                    ├── main.py         (owner: myapp:myapp, permissions: 644)
+            /opt/runner-start/
+                    ├── run.sh          (owner: runner-start:runner-start, permissions: 755)
+                    ├── main.py         (owner: runner-start:runner-start, permissions: 644)
                     └── config/
-                        └── app.conf    (owner: myapp:myapp, permissions: 644)
+                        └── app.conf    (owner: runner-start:runner-start, permissions: 644)
 
             /etc/systemd/creds/
-                            └── api_key.cred    (owner: myapp:myapp, permissions: 600)sy
+                            └── api_key    (owner: runner-start:runner-start, permissions: 600)sy
 
 ### Enable the sevice:
 
@@ -105,11 +106,11 @@ ExecStart=/usr/bin/docker run --rm \
 sudo systemctl daemon-reload
 
 # Enable and start your service
-sudo systemctl enable myapp.service
-sudo systemctl start myapp.service
+sudo systemctl enable runner-start.service
+sudo systemctl start runner-start.service
 
 # Check status
-sudo systemctl status myapp.service
+sudo systemctl status runner-start.service
 ```
 
 ## Accessing the API key:
@@ -118,7 +119,7 @@ example of use:
 
 ```
 #!/bin/bash
-# /opt/myapp/run.sh (absolute path to the script)
+# /opt/runner-start/run.sh (absolute path to the script)
 
 # The credential is available at $CREDENTIALS_DIRECTORY/api_key
 API_KEY=$(cat "$CREDENTIALS_DIRECTORY/api_key")
@@ -128,6 +129,7 @@ curl -H "Authorization: Bearer $API_KEY" https://api.example.com/data
 
 # Or export it for other processes
 export API_KEY
-python3 /opt/myapp/main.py
+python3 /opt/runner-start/main.py
 ```
 
+*** get docker to run without sudo
