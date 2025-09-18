@@ -131,5 +131,3 @@ curl -H "Authorization: Bearer $API_KEY" https://api.example.com/data
 export API_KEY
 python3 /opt/runner-start/main.py
 ```
-
-*** get docker to run without sudo
