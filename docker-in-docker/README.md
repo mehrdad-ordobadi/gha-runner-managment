@@ -204,4 +204,4 @@ docker inspect <your-sysbox-container-id> | grep -i privileged
 # You should see "Privileged": false,
 ```
 
-Excellent! You are not running DinD safely and in isolation using sysbox!
+Excellent! You are now running DinD safely and in isolation using sysbox!
