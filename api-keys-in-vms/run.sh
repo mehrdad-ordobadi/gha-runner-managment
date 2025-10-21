@@ -11,12 +11,12 @@ if [ -n "$API_KEY" ]; then
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer $API_KEY" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          "https://api.github.com/repos/${GH_USER}/${REPO}/actions/runners/registration-token")
+          "https://api.github.com/repos/${GH_USER}/${REPO}/actions/runners/registration-token" 2>/dev/null)
 else
-        echo "****Cant read API KEY****"
+    echo "****Cant read API KEY****"
 fi
 
-REG_TOKEN=$(echo "$RESPONSE" | jq -r '.token')
+REG_TOKEN=$(echo "$RESPONSE" | jq -r '.token' 2>/dev/null)
 
 if [ -z "$REG_TOKEN" ]; then
 	echo "****No token!****"

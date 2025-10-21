@@ -24,6 +24,7 @@ WorkingDirectory=/opt/runner-start
 Environment=HOME=/opt/runner-start
 ExecStart=/opt/runner-start/check-runner.sh
 LoadCredentialEncrypted=api_key:/etc/systemd/creds/api_key
+OnFailure=notify-failure.service
 ```
 
 Next we create a timer service to run this service periodically:
@@ -57,4 +58,11 @@ polkit.addRule(function(action, subject) {
 });
 ```
 
+### Note:
+The Polkit rule file must have the correct permissions, or Polkit will ignore it.
+
+```
+sudo chown root:root /etc/polkit-1/rules.d/50-runner-start.rules
+sudo chmod 644 /etc/polkit-1/rules.d/50-runner-start.rules
+```
 

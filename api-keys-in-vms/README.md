@@ -60,14 +60,14 @@ Description=My Application
 After=network.target
 
 [Service]
-Type=simple
+Type=oneshot
 User=runner-start
 Group=runner-start
 WorkingDirectory=/opt/runner-start
 Environment=HOME=/opt/runner-start
 ExecStart=/opt/runner-start/run.sh
 LoadCredentialEncrypted=api_key:/etc/systemd/creds/api_key
-Restart=on-failure
+
 
 [Install]
 WantedBy=multi-user.target
@@ -131,5 +131,3 @@ curl -H "Authorization: Bearer $API_KEY" https://api.example.com/data
 export API_KEY
 python3 /opt/runner-start/main.py
 ```
-
-## Next add checks for the runner: check if runner exists before provisioning. Cronjob to check status - if status is not good remove and reprovision.
