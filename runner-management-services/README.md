@@ -1,0 +1,1 @@
+In order to use the script here, please review **invoke-service-from-script-wo-sudo**!
