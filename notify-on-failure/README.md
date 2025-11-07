@@ -10,8 +10,8 @@ First, as I did in **api-keys-in-vms** section I will encrypt and store the webh
 ```
 echo "<webhook-url>>" | sudo systemd-creds encrypt - /etc/systemd/creds/dc-webhook-url
 
-sudo chown runner-start:runner-start /etc/systemd/creds/dc-webhook-url.cred
-sudo chmod 600 /etc/systemd/creds/dc-webhook-url.cred
+sudo chown runner-start:runner-start /etc/systemd/creds/dc-webhook-url
+sudo chmod 600 /etc/systemd/creds/dc-webhook-url
 ```
 
 ### Create your script:

@@ -17,8 +17,8 @@ sudo mkdir -p /etc/systemd/creds
 echo "<your_api_key>" | sudo systemd-creds encrypt - /etc/systemd/creds/api_key
 
 # Set appropriate permissions
-sudo chown runner-start:runner-start /etc/systemd/creds/api_key.cred
-sudo chmod 600 /etc/systemd/creds/api_key.cred
+sudo chown runner-start:runner-start /etc/systemd/creds/api_key
+sudo chmod 600 /etc/systemd/creds/api_key
 ```
 
 #### Create your script

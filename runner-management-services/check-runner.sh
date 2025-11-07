@@ -7,12 +7,17 @@ GH_USER="mehrdad-ordobadi"
 RUNNER_NAME="mac2-runner"
 
 remove_runner() {	
+	echo "****Removing the offline runner...****"
 	curl -s -L \
 		-X DELETE \
 		-H "Accept: application/vnd.github+json" \
 		-H "Authorization: Bearer $API_KEY" \
 		-H "X-GitHub-Api-Version: 2022-11-28" \
 		"https://api.github.com/repos/${GH_USER}/${REPO}/actions/runners/${RUNNER_ID}"
+
+	echo "****Stopping and removing the runner-container...****"
+	docker stop runner-container
+	docker rm -f runner-container
 }
 
 if [ -n "$API_KEY" ]; then
@@ -32,10 +37,11 @@ RUNNER_ID=$(echo "$RESPONSE" | jq -r --arg name "$RUNNER_NAME" '.runners[] | sel
 if [ "$RUNNER_STATUS" = "online" ]; then
 	exit 0
 elif [ -z "$RUNNER_ID" ]; then
-	echo "***Runner not found - restarting!***"
-	systemctl restart runner-start.service
+	echo "***Runner not found - attempting to create a new runner!***"
+	systemctl restart runner-starter.service
 else
-	echo "***Runner not online - removing and restarting!***"
+	echo "***Runner not online - removing!***"
 	remove_runner
-	systemctl restart runner-start.service
+	echo "***Offline runner removed - attempting to create a new runner!***"
+	systemctl restart runner-starter.service
 fi
