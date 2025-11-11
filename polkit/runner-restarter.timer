@@ -1,0 +1,11 @@
+[Unit]
+Description=Monitor Runner Every 30 Minutes
+After=runner-starter.service
+
+[Timer]
+OnBootSec=10min
+OnActiveSec=5min
+OnUnitActiveSec=30min
+
+[Install]
+WantedBy=timers.target

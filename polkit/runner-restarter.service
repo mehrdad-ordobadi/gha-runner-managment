@@ -1,0 +1,13 @@
+[Unit]
+Description=Monitor Runner Start Service
+After=runner-starter.service
+OnFailure=notify-failure.service
+
+[Service]
+Type=oneshot
+User=runner-start
+Group=runner-start
+WorkingDirectory=/opt/runner-start
+Environment=HOME=/opt/runner-start
+ExecStart=/opt/runner-start/check-runner.sh
+LoadCredentialEncrypted=api_key:/etc/systemd/creds/api_key

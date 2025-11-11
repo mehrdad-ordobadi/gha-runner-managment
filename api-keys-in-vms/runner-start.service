@@ -1,0 +1,15 @@
+[Unit]
+Description=My Application
+After=network.target
+
+[Service]
+Type=oneshot
+User=runner-start
+Group=runner-start
+WorkingDirectory=/opt/runner-start
+Environment=HOME=/opt/runner-start
+ExecStart=/opt/runner-start/run.sh
+LoadCredentialEncrypted=api_key:/etc/systemd/creds/api_key
+
+[Install]
+WantedBy=multi-user.target

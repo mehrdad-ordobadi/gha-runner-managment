@@ -8,20 +8,20 @@ RUNNER_NAME="mac2-runner"
 
 check_runner_status() {
 
-if [ -n "$API_KEY" ]; then
-	RESPONSE=$(curl -s -L \
-		-H "Accept: application/vnd.github+json" \
-		-H "Authorization: Bearer $API_KEY" \
-		-H "X-GitHub-Api-Version: 2022-11-28" \
-		"https://api.github.com/repos/${GH_USER}/${REPO}/actions/runners" 2>/dev/null)
-else
-	echo "***Cannot access API key!****" >&2
-	exit 2
-fi
+	if [ -n "$API_KEY" ]; then
+		RESPONSE=$(curl -s -L \
+			-H "Accept: application/vnd.github+json" \
+			-H "Authorization: Bearer $API_KEY" \
+			-H "X-GitHub-Api-Version: 2022-11-28" \
+			"https://api.github.com/repos/${GH_USER}/${REPO}/actions/runners" 2>/dev/null)
+	else
+		echo "***Cannot access API key!****" >&2
+		exit 2
+	fi
 
-RUNNER_STATUS=$(echo "$RESPONSE" | jq -r --arg name "$RUNNER_NAME" '.runners[] | select(.name == $name) | .status')
+	RUNNER_STATUS=$(echo "$RESPONSE" | jq -r --arg name "$RUNNER_NAME" '.runners[] | select(.name == $name) | .status')
 
-echo "$RUNNER_STATUS"
+	echo "$RUNNER_STATUS"
 
 }
 
@@ -33,7 +33,7 @@ if [ -n "$API_KEY" ]; then
 		-H "X-GitHub-Api-Version: 2022-11-28" \
 		"https://api.github.com/repos/${GH_USER}/${REPO}/actions/runners/registration-token" 2>/dev/null)
 else
-	echo "****Cant read API_KEY!****"
+	echo "***Cant read API_KEY!***"
 	exit 1
 fi
 
@@ -44,7 +44,7 @@ if [ -z "$REG_TOKEN" ]; then
 	exit 1
 fi
 
-echo "***Creating runner container...****"
+echo "***Creating runner container...***"
 docker run -d --rm \
 	--runtime=sysbox-runc \
 	-e GITHUB_URL="https://github.com/${GH_USER}/${REPO}" \
