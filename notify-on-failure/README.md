@@ -9,7 +9,7 @@ I will use my personal discord server. I have create a channel for the notificat
 First, as I did in **api-keys-in-vms** section I will encrypt and store the webhook URL using systemd.
 
 ```
-echo "<webhook-url>>" | sudo systemd-creds encrypt - /etc/systemd/creds/dc-webhook-url
+echo "<webhook-url>" | sudo systemd-creds encrypt - /etc/systemd/creds/dc-webhook-url
 
 sudo chown runner-start:runner-start /etc/systemd/creds/dc-webhook-url
 sudo chmod 600 /etc/systemd/creds/dc-webhook-url
